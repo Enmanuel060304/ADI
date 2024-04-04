@@ -28,3 +28,11 @@ CREATE TABLE Pedidos
     FOREIGN KEY (id_cliente) REFERENCES Clientes(id),
     FOREIGN KEY (id_produto) REFERENCES Produtos(id)
 );
+
+CREATE TABLE Usuarios
+(
+    id INT PRIMARY KEY IDENTITY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    senha VARCHAR(100) NOT NULL
+);
