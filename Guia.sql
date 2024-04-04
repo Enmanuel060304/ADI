@@ -1,0 +1,19 @@
+CREATE DATABASE Guia
+USE Guia
+
+CREATE TABLE Clientes
+(
+    id INT PRIMARY KEY IDENTITY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telefone VARCHAR(15) NOT NULL,
+    endereco VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Produtos
+(
+    id INT PRIMARY KEY IDENTITY,
+    nome VARCHAR(100) NOT NULL,
+    descricao VARCHAR(100) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL
+);
