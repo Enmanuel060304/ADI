@@ -1,4 +1,4 @@
-ALTER PROCEDURE sp_venta @id_cliente INT,
+CREATE PROCEDURE sp_venta @id_cliente INT,
                          @id_producto INT,
                          @cantidad INT
 AS
@@ -27,3 +27,7 @@ AS
 GO
 
 EXEC sp_venta 1, 1, 20
+
+SELECT * FROM VENTA
+SELECT * FROM PRODUCTO
+SELECT * FROM EMPLEADO
