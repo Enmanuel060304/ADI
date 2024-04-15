@@ -1,133 +1,192 @@
 CREATE DATABASE ADI_DB;
 USE ADI_DB;
 
-CREATE TABLE ROLE
+GO;
+-- Create the Table for the Rol
+CREATE TABLE [Rol]
 (
-    ID   INT         NOT NULL PRIMARY KEY,
-    NAME VARCHAR(50) NOT NULL,
+    [id]   UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [name] NVARCHAR(50)     NOT NULL,
+    CONSTRAINT [PK_Rol_id] PRIMARY KEY ([id])
 );
 
+GO;
 
-CREATE TABLE EMPLEADO
+-- Create the Unique Index for the Rol
+CREATE UNIQUE INDEX [IX_Rol_name]
+    ON [Rol] ([name]);
+
+GO;
+
+-- Create the Table for the Employee
+CREATE TABLE [Employee]
 (
-    ID        INT         NOT NULL PRIMARY KEY,
-    NOMBRE    VARCHAR(50) NOT NULL,
-    APELLIDO  VARCHAR(50) NOT NULL,
-    EMAIL     VARCHAR(50) NOT NULL,
-    TELEFONO  VARCHAR(50) NOT NULL,
-    DIRECCION VARCHAR(50) NOT NULL,
-    ID_ROLE   INT         NOT NULL,
-    FOREIGN KEY (ID_ROLE) REFERENCES ROLE (ID)
+    [id]       UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [name]     NVARCHAR(50)     NOT NULL,
+    [LastName] NVARCHAR(50)     NOT NULL,
+    [Phone]    NVARCHAR(50)     NOT NULL,
+    [email]    NVARCHAR(50)     NOT NULL,
+    [password] NVARCHAR(50)     NOT NULL,
+    [rol_id]   UNIQUEIDENTIFIER NOT NULL,
+    CONSTRAINT [PK_Employee_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_Employee_Rol_Id] FOREIGN KEY ([rol_id]) REFERENCES [Rol] ([id])
 );
 
-CREATE TABLE CLIENTE
+GO;
+
+-- Create the Unique Index for the Employee
+CREATE UNIQUE INDEX [IX_Employee_name]
+    ON [Employee] ([name], [LastName], [email], [Phone], [password]);
+
+GO;
+
+-- Create the Table for the Customer
+CREATE TABLE [Customer]
 (
-    ID        INT         NOT NULL PRIMARY KEY,
-    NOMBRE    VARCHAR(50) NULL,
-    APELLIDO  VARCHAR(50) NULL,
-    EMAIL     VARCHAR(50) NULL,
-    TELEFONO  VARCHAR(50) NULL,
-    DIRECCION VARCHAR(50) NULL
+    [id]       UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [name]     NVARCHAR(50)     NOT NULL,
+    [LastName] NVARCHAR(50)     NOT NULL,
+    [Phone]    NVARCHAR(50)     NOT NULL,
+    [Email]    NVARCHAR(50)     NOT NULL,
+    CONSTRAINT [PK_Customer_id] PRIMARY KEY ([id])
 );
 
-CREATE TABLE PROVEEDOR
+GO;
+-- Create the Unique Index for the Customer
+CREATE UNIQUE INDEX [IX_Customer_name]
+    ON [Customer] ([name], [LastName], [Phone], [Email]);
+
+GO;
+-- Create the Table for the Supplier
+CREATE TABLE Supplier
 (
-    ID        INT         NOT NULL PRIMARY KEY,
-    NOMBRE    VARCHAR(50) NULL,
-    EMAIL     VARCHAR(50) NULL,
-    TELEFONO  VARCHAR(50) NULL,
-    DIRECCION VARCHAR(50) NULL
+    [id]       UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Name]     NVARCHAR(50)     NOT NULL,
+    [LastName] NVARCHAR(50)     NOT NULL,
+    [Phone]    NVARCHAR(50)     NOT NULL,
+    [Email]    NVARCHAR(50)     NOT NULL,
+    [Address]  NVARCHAR(50)     NOT NULL,
+    CONSTRAINT [PK_Supplier_id] PRIMARY KEY ([id])
+
 );
 
-CREATE TABLE VENTA
-(
-    ID         INT  NOT NULL PRIMARY KEY,
-    ID_CLIENTE INT  NOT NULL,
-    ID_EMPLEADO INT NOT NULL,
-    FECHA      DATE NOT NULL,
+GO;
 
-    FOREIGN KEY (ID_CLIENTE) REFERENCES CLIENTE (ID),
-    FOREIGN KEY (ID_EMPLEADO) REFERENCES EMPLEADO (ID)
+-- Create the Unique Index for the Supplier
+CREATE UNIQUE INDEX [IX_Supplier_name]
+    ON [Supplier] ([Name], [LastName], [Phone], [Email])
+
+GO;
+
+-- CREATE TABLE SALES
+CREATE TABLE Sale
+(
+    [id]          UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Customer_id] UNIQUEIDENTIFIER NOT NULL,
+    [Employee_id] UNIQUEIDENTIFIER NOT NULL,
+    [Date]        DATETIMEOFFSET   NOT NULL,
+    CONSTRAINT [PK_Sale_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_Sale_Customer_id] FOREIGN KEY ([Customer_id]) REFERENCES [Customer] ([id]),
+    CONSTRAINT [FK_Sale_Employee_id] FOREIGN KEY ([Employee_id]) REFERENCES [Employee] ([id])
+
 );
 
---add column to table venta
+GO;
 
-CREATE TABLE LINEA
+-- CREATE TABLE Line
+CREATE TABLE Line
 (
-    ID     INT         NOT NULL IDENTITY PRIMARY KEY,
-    NOMBRE VARCHAR(50) NOT NULL
+    [id]   UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Name] NVARCHAR(50)     NOT NULL
+        CONSTRAINT [PK_Line_id] PRIMARY KEY ([id])
 );
 
-CREATE TABLE CATEGORIA
+GO;
+
+--CREATE INDEX FOR LINE.Name
+
+CREATE UNIQUE INDEX [IX_Line_Name]
+    ON [Line] ([Name]);
+
+GO;
+
+CREATE TABLE Category
 (
-    ID       INT         NOT NULL IDENTITY PRIMARY KEY,
-    NAME     VARCHAR(50) NOT NULL,
-    ID_LINEA INT         NOT NULL,
-    FOREIGN KEY (ID_LINEA) REFERENCES LINEA (ID)
+    [id]    UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Name]  NVARCHAR(50)     NOT NULL,
+    Id_Line UNIQUEIDENTIFIER NOT NULL,
+    CONSTRAINT [PK_Category_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_Line_id] FOREIGN KEY ([Id_Line]) REFERENCES [Line] ([id])
 );
 
-CREATE TABLE PRODUCTO
+GO;
+
+--Create index for Category.Name
+CREATE UNIQUE INDEX [IX_Category_Name]
+    ON [Category] ([Name]);
+
+GO;
+
+-- CREATE TABLE PRODUCT
+CREATE TABLE Product
 (
-    ID           INT            NOT NULL PRIMARY KEY,
-    NOMBRE       VARCHAR(50)    NOT NULL,
-    PRECIO       DECIMAL(10, 2) NOT NULL,
-    STOCK        INT            NOT NULL,
-    ID_CATEGORIA INT            NOT NULL,
-    FOREIGN KEY (ID_CATEGORIA) REFERENCES CATEGORIA (ID)
+    [id]          UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Name]        NVARCHAR(50)     NOT NULL,
+    [Price]       DECIMAL(18, 2)   NOT NULL,
+    [Stock]       INT              NOT NULL,
+    [Category_id] UNIQUEIDENTIFIER NOT NULL,
+    CONSTRAINT [PK_Product_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_Category_id] FOREIGN KEY ([Category_id]) REFERENCES [Category] ([id])
 );
 
-CREATE TABLE DETALLE_VENTA
+GO;
+
+-- CREATE INDEX FOR PRODUCT.Name
+CREATE UNIQUE INDEX [IX_Product_Name]
+    ON [Product] ([Name]);
+
+GO;
+
+--CREATE TABLE FOR SALEDETAIL
+CREATE TABLE SalesDetail
 (
-    ID_VENTA    INT            NOT NULL,
-    ID_PRODUCTO INT            NOT NULL,
-    CANTIDAD    INT            NOT NULL,
-    PRECIO      DECIMAL(10, 2) NOT NULL,
-    DESCRIPCION VARCHAR(50)    NULL,
-    FOREIGN KEY (ID_VENTA) REFERENCES VENTA (ID),
-    FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO (ID)
+    [id]          UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [id_Product]  UNIQUEIDENTIFIER NOT NULL,
+    [Amount]      DECIMAL(10, 2)   NOT NULL,
+    [Description] NVARCHAR(50)     NOT NULL,
+    CONSTRAINT [FK_SalesDetail_Product_id] FOREIGN KEY ([id_Product]) REFERENCES [Product] ([id]),
+    CONSTRAINT [PK_SalesDetail_id] PRIMARY KEY ([id])
+
 );
 
-CREATE TABLE COMPRA
+GO;
+
+--CREATE TABLE FOR PURCHASE
+CREATE TABLE Purchase
 (
-    ID           INT  NOT NULL PRIMARY KEY,
-    FECHA        DATE NOT NULL,
-    ID_PROVEEDOR INT  NOT NULL,
-    Id_EMPLEADO  INT  NOT NULL,
-    FOREIGN KEY (ID_PROVEEDOR) REFERENCES PROVEEDOR (ID),
-    FOREIGN KEY (Id_EMPLEADO) REFERENCES EMPLEADO (ID)
+    [id]          UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Date]        DATETIMEOFFSET   NOT NULL,
+    [Supplier_id] UNIQUEIDENTIFIER NOT NULL,
+    [Employee_id] UNIQUEIDENTIFIER NOT NULL,
+    CONSTRAINT [PK_Purchase_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_Purchase_Supplier_id] FOREIGN KEY ([Supplier_id]) REFERENCES [Supplier] ([id]),
+    CONSTRAINT [FK_Purchase_Employee_id] FOREIGN KEY ([Employee_id]) REFERENCES [Employee] ([id])
+
 );
 
-CREATE TABLE DETALLE_COMPRA
+GO;
+
+--CREATE TABLE FOR PURCHASEDETAIL
+CREATE TABLE PurchaseDetail
 (
-    ID_COMPRA   INT            NOT NULL,
-    ID_PRODUCTO INT            NOT NULL,
-    CANTIDAD    INT            NOT NULL,
-    PRECIO      DECIMAL(10, 2) NOT NULL,
-    DESCRIPCION VARCHAR(50)    NOT NULL,
-    FOREIGN KEY (ID_COMPRA) REFERENCES COMPRA (ID),
-    FOREIGN KEY (ID_PRODUCTO) REFERENCES PRODUCTO (ID)
+    Id_Purchase UNIQUEIDENTIFIER NOT NULL,
+    Id_Product  UNIQUEIDENTIFIER NOT NULL,
+    Amount      DECIMAL(10, 2)   NOT NULL,
+    Description NVARCHAR(50)     NOT NULL,
+    CONSTRAINT [FK_PurchaseDetails_Purchase_id] FOREIGN KEY ([Id_Purchase]) REFERENCES [Purchase] ([id]),
+    CONSTRAINT [FK_PurchaseDetails_Product_id] FOREIGN KEY ([Id_Product]) REFERENCES [Product] ([id])
 );
 
+GO;
 
-SELECT *
-FROM CLIENTE;
-SELECT *
-FROM PROVEEDOR;
-select *
-from LINEA;
-SELECT *
-FROM CATEGORIA;
-SELECT *
-FROM PRODUCTO;
-SELECT *
-FROM VENTA;
-SELECT *
-FROM DETALLE_VENTA;
-SELECT *
-FROM COMPRA;
-SELECT *
-FROM DETALLE_COMPRA;
-SELECT *
-FROM EMPLEADO;
-SELECT *
-from CATEGORIA
+

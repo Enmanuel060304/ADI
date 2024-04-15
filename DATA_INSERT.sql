@@ -1,19 +1,19 @@
 USE ADI_DB
-
+GO;
 --Valores de tabla ROLE
-INSERT INTO ROLE (ID, NAME)
+INSERT INTO Rol (ID, NAME)
 VALUES (0, 'USER');
-INSERT INTO ROLE (ID, NAME)
+INSERT INTO Rol (ID, NAME)
 VALUES (1, 'ADMIN');
-
+GO;
 --Valores de Tabla Emplead
-INSERT INTO EMPLEADO (ID, NOMBRE, APELLIDO, EMAIL, TELEFONO, DIRECCION, ID_ROLE)
+INSERT INTO [User] (ID, NOMBRE, APELLIDO, EMAIL, TELEFONO, DIRECCION, ID_ROLE)
 VALUES (1, 'Juan', 'Perez', 'JUAN@gmail.com', '123456789', 'Calle 123', 0);
-INSERT INTO EMPLEADO (ID, NOMBRE, APELLIDO, EMAIL, TELEFONO, DIRECCION, ID_ROLE)
+INSERT INTO [User] (ID, NOMBRE, APELLIDO, EMAIL, TELEFONO, DIRECCION, ID_ROLE)
 VALUES (2, 'Maria', 'Gomez', 'MARIA@GMAIL.CO', '123456789', 'Calle 123', 0);
-
+GO;
 --valores tabla cliente
-INSERT INTO CLIENTE (ID, NOMBRE, APELLIDO, EMAIL, TELEFONO, DIRECCION)
+INSERT INTO Customer (ID, NOMBRE, APELLIDO, EMAIL, TELEFONO, DIRECCION)
 VALUES (1, 'Juan', 'Martínez', 'juan@example.com', '555-1234', 'Calle Principal 123'),
        (2, 'María', 'García', 'maria@example.com', '555-5678', 'Avenida Central 456'),
        (3, 'Pedro', 'López', 'pedro@example.com', '555-9101', 'Plaza Mayor 789'),
@@ -35,31 +35,36 @@ VALUES (1, 'Juan', 'Martínez', 'juan@example.com', '555-1234', 'Calle Principal 
        (19, 'Andrés', 'Navarro', 'andres@example.com', '555-3738', 'Paseo del Lago 14'),
        (20, 'Beatriz', 'Gutiérrez', 'beatriz@example.com', '555-3940', 'Avenida del Mar 16');
 
+GO;
 --valores tabla proveedor
-INSERT INTO PROVEEDOR (ID, NOMBRE, EMAIL, TELEFONO, DIRECCION)
+INSERT INTO Supplier (ID, NOMBRE, EMAIL, TELEFONO, DIRECCION)
 VALUES (1, 'Juan Martínez', 'juanmartinez@example.com', '555-1000', 'Calle Comercial 123'),
        (2, 'María García', 'mariagarcia@example.com', '555-2000', 'Avenida Industrial 456'),
        (3, 'Pedro López', 'pedrolopez@example.com', '555-3000', 'Carretera Logística 789'),
        (4, 'Ana Sánchez', 'anasanchez@example.com', '555-4000', 'Plaza Empresarial 12'),
        (5, 'Luis Rodríguez', 'luisrodriguez@example.com', '555-5000', 'Calle Fabricación 34');
 
+GO;
 --VALORES PARA TABLA LINEA
-INSERT INTO LINEA (NOMBRE)
-VALUES ('Corriente'),
-       ('Plata'),
-       ('Luxury');
+INSERT INTO Line (ID, nombre)
+VALUES (1,'Corriente'),
+       (2,'Plata'),
+       (3,'Luxury');
 
+GO;
 --valores para tabla categoria
 
 -- Categorías para la línea 1
-INSERT INTO CATEGORIA (NAME, ID_LINEA)
-VALUES ('Diademas', 1),
-       ('Pulsera', 1),
-       ('Reloj', 1),
-       ('Set Completo', 1);
+INSERT INTO Category (ID ,NAME, ID_LINEA)
+VALUES (1,'Diademas', 1),
+       (2,'Pulsera', 1),
+       (3,'Reloj', 1),
+       (4,'Set Completo', 1);
+
+GO;
 
 --valores para tabla producto
-INSERT INTO PRODUCTO (ID, NOMBRE, PRECIO, STOCK, ID_CATEGORIA)
+INSERT INTO Product (ID, NOMBRE, PRECIO, STOCK, ID_CATEGORIA)
 VALUES (1, 'Collar de plata', 99.99, 100, 1),
        (2, 'Pulsera de oro', 149.99, 80, 2),
        (3, 'Aretes de diamantes', 199.99, 120, 3),
@@ -81,9 +86,9 @@ VALUES (1, 'Collar de plata', 99.99, 100, 1),
        (19, 'Colgante de ópalo', 169.99, 70, 1),
        (20, 'Pulsera de rubíes', 249.99, 90, 2);
 
-
+GO;
 --valores para tabla venta
-INSERT INTO VENTA (ID, ID_CLIENTE, ID_EMPLEADO, FECHA)
+INSERT INTO Sales (ID, ID_CLIENTE, ID_EMPLEADO, FECHA)
 VALUES (1, 5, 1, '2024-04-01'),
        (2, 12, 2, '2024-04-02'),
        (3, 8, 1, '2024-04-03'),
@@ -115,9 +120,10 @@ VALUES (1, 5, 1, '2024-04-01'),
        (29, 11, 1, '2024-04-29'),
        (30, 16, 2, '2024-04-30');
 
+GO;
 
 --valores para tabla compra
-INSERT INTO COMPRA (ID, FECHA, ID_PROVEEDOR, Id_EMPLEADO)
+INSERT INTO Buys (ID, FECHA, ID_PROVEEDOR, Id_EMPLEADO)
 VALUES (1, '2024-04-01', 3, 1),
        (2, '2024-04-02', 2, 2),
        (3, '2024-04-03', 1, 1),
@@ -149,10 +155,10 @@ VALUES (1, '2024-04-01', 3, 1),
        (29, '2024-04-29', 4, 1),
        (30, '2024-04-30', 5, 2);
 
-
+GO;
 --valores para tabla detalle_Venta
 
-Insert into DETALLE_VENTA (ID_VENTA, ID_PRODUCTO, CANTIDAD, PRECIO, DESCRIPCION)
+Insert into Det_Sales (ID_VENTA, ID_PRODUCTO, CANTIDAD, PRECIO, DESCRIPCION)
 values (1, 1, 1, 99.99, 'Collar de plata'),
        (2, 2, 1, 149.99, 'Pulsera de oro'),
        (3, 3, 1, 199.99, 'Aretes de diamantes'),
@@ -174,8 +180,9 @@ values (1, 1, 1, 99.99, 'Collar de plata'),
        (19, 19, 1, 169.99, 'Colgante de ópalo'),
        (20, 20, 1, 249.99, 'Pulsera de rubíes');
 
+GO;
 --valores para tabla detalle_compra
-INSERT INTO DETALLE_COMPRA (ID_COMPRA, ID_PRODUCTO, CANTIDAD, PRECIO, DESCRIPCION)
+INSERT INTO Det_Buys (ID_COMPRA, ID_PRODUCTO, CANTIDAD, PRECIO, DESCRIPCION)
 VALUES (1, 1, 1, 99.99, 'Collar de plata'),
        (2, 2, 1, 149.99, 'Pulsera de oro'),
        (3, 3, 1, 199.99, 'Aretes de diamantes'),
@@ -195,4 +202,30 @@ VALUES (1, 1, 1, 99.99, 'Collar de plata'),
        (17, 17, 1, 199.99, 'Anillo de oro amarillo'),
        (18, 18, 1, 49.99, 'Aretes de plata'),
        (19, 19, 1, 169.99, 'Colgante de ópalo'),
-       (20, 20, 1, 249.99, 'Pulsera de rubíes');
+       (20, 20, 1, 249.99, 'Pulsera de rubíes'),
+        (21, 1, 1, 99.99, 'Collar de plata'),
+       (22, 2, 1, 149.99, 'Pulsera de oro'),
+       (23, 3, 1, 199.99, 'Aretes de diamantes'),
+       (24, 4, 1, 299.99, 'Anillo de compromiso'),
+       (25, 5, 1, 79.99, 'Broche de perlas'),
+       (26, 6, 1, 249.99, 'Pendientes de rubíes'),
+       (27, 7, 1, 179.99, 'Colgante de zafiros'),
+       (28, 8, 1, 349.99, 'Collar de esmeraldas'),
+       (29, 9, 1, 59.99, 'Pulsera de plata'),
+       (30, 10, 1, 199.99, 'Aretes de oro blanco'),
+       (31, 11, 1, 129.99, 'Anillo de amatista'),
+       (32, 12, 1, 499.99, 'Collar de diamantes'),
+       (33, 13, 1, 89.99, 'Broche de oro rosa'),
+       (34, 14, 1, 129.99, 'Pendientes de perlas'),
+       (35, 15, 1, 159.99, 'Colgante de turquesa'),
+       (36, 16, 1, 79.99, 'Pulsera de amatista'),
+       (37, 17, 1, 199.99, 'Anillo de oro amarillo'),
+       (38, 18, 1, 49.99, 'Aretes de plata'),
+       (39, 19, 1, 169.99, 'Colgante de ópalo'),
+       (40, 20, 1, 249.99, 'Pulsera de rubíes');
+GO;
+
+select * from Product
+SELECT * FROM Line
+select * from Sales
+select * from Buys
