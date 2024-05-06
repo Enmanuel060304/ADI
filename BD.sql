@@ -1,192 +1,168 @@
-CREATE DATABASE ADI_DB;
-USE ADI_DB;
+CREATE DATABASE ADI_DB
+GO
 
-GO;
--- Create the Table for the Rol
+USE ADI_DB;
+GO
+
 CREATE TABLE [Rol]
 (
-    [id]   UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    [name] NVARCHAR(50)     NOT NULL,
+    [id]     UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Nombre] NVARCHAR(50)     NOT NULL,
     CONSTRAINT [PK_Rol_id] PRIMARY KEY ([id])
 );
+GO
 
-GO;
+CREATE UNIQUE INDEX [IX_Rol_Nombre]
+    ON [Rol] ([Nombre]);
+GO
 
--- Create the Unique Index for the Rol
-CREATE UNIQUE INDEX [IX_Rol_name]
-    ON [Rol] ([name]);
-
-GO;
-
--- Create the Table for the Employee
-CREATE TABLE [Employee]
+CREATE TABLE [Empleado]
 (
-    [id]       UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    [name]     NVARCHAR(50)     NOT NULL,
-    [LastName] NVARCHAR(50)     NOT NULL,
-    [Phone]    NVARCHAR(50)     NOT NULL,
-    [email]    NVARCHAR(50)     NOT NULL,
-    [password] NVARCHAR(50)     NOT NULL,
-    [rol_id]   UNIQUEIDENTIFIER NOT NULL,
+    [id]         UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Nombre]     NVARCHAR(50)     NOT NULL,
+    [Apellido]   NVARCHAR(50)     NOT NULL,
+    [Telefono]   NVARCHAR(50)     NOT NULL,
+    [email]      NVARCHAR(50)     NOT NULL,
+    [Contraseña] NVARCHAR(50)     NOT NULL,
+    [rol_id]     UNIQUEIDENTIFIER NOT NULL,
     CONSTRAINT [PK_Employee_id] PRIMARY KEY ([id]),
     CONSTRAINT [FK_Employee_Rol_Id] FOREIGN KEY ([rol_id]) REFERENCES [Rol] ([id])
 );
+GO
 
-GO;
+CREATE UNIQUE INDEX [IX_Empleado_Nombre]
+    ON [Empleado] ([Nombre], [Apellido], [Telefono], [email]);
+GO
 
--- Create the Unique Index for the Employee
-CREATE UNIQUE INDEX [IX_Employee_name]
-    ON [Employee] ([name], [LastName], [email], [Phone], [password]);
-
-GO;
-
--- Create the Table for the Customer
-CREATE TABLE [Customer]
+CREATE TABLE [Cliente]
 (
     [id]       UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    [name]     NVARCHAR(50)     NOT NULL,
-    [LastName] NVARCHAR(50)     NOT NULL,
-    [Phone]    NVARCHAR(50)     NOT NULL,
+    [Nombre]   NVARCHAR(50)     NOT NULL,
+    [Apellido] NVARCHAR(50)     NOT NULL,
+    [Telefono] NVARCHAR(50)     NOT NULL,
     [Email]    NVARCHAR(50)     NOT NULL,
     CONSTRAINT [PK_Customer_id] PRIMARY KEY ([id])
 );
+GO
 
-GO;
--- Create the Unique Index for the Customer
-CREATE UNIQUE INDEX [IX_Customer_name]
-    ON [Customer] ([name], [LastName], [Phone], [Email]);
+CREATE UNIQUE INDEX [IX_Cliente_Nombre]
+    ON [Cliente] ([Nombre], [Apellido], [Telefono], [Email]);
 
-GO;
--- Create the Table for the Supplier
-CREATE TABLE Supplier
+GO
+
+CREATE TABLE [Proveedor]
 (
-    [id]       UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    [Name]     NVARCHAR(50)     NOT NULL,
-    [LastName] NVARCHAR(50)     NOT NULL,
-    [Phone]    NVARCHAR(50)     NOT NULL,
-    [Email]    NVARCHAR(50)     NOT NULL,
-    [Address]  NVARCHAR(50)     NOT NULL,
-    CONSTRAINT [PK_Supplier_id] PRIMARY KEY ([id])
+    [id]        UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Nombre]    NVARCHAR(50)     NOT NULL,
+    [Apellido]  NVARCHAR(50)     NOT NULL,
+    [Telefono]  NVARCHAR(50)     NOT NULL,
+    [Email]     NVARCHAR(50)     NOT NULL,
+    [Direccion] NVARCHAR(200)    NOT NULL,
+    CONSTRAINT [PK_Proveedor_id] PRIMARY KEY ([id])
 
 );
+GO
 
-GO;
 
--- Create the Unique Index for the Supplier
-CREATE UNIQUE INDEX [IX_Supplier_name]
-    ON [Supplier] ([Name], [LastName], [Phone], [Email])
+CREATE UNIQUE INDEX [IX_Proveedor_name]
+    ON [Proveedor] ([nOmbre], [Apellido], [Telefono], [Email]);
+GO
 
-GO;
-
--- CREATE TABLE SALES
-CREATE TABLE Sale
+CREATE TABLE [venta]
 (
     [id]          UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    [Customer_id] UNIQUEIDENTIFIER NOT NULL,
-    [Employee_id] UNIQUEIDENTIFIER NOT NULL,
-    [Date]        DATETIMEOFFSET   NOT NULL,
-    CONSTRAINT [PK_Sale_id] PRIMARY KEY ([id]),
-    CONSTRAINT [FK_Sale_Customer_id] FOREIGN KEY ([Customer_id]) REFERENCES [Customer] ([id]),
-    CONSTRAINT [FK_Sale_Employee_id] FOREIGN KEY ([Employee_id]) REFERENCES [Employee] ([id])
+    [Cliente_id]  UNIQUEIDENTIFIER NOT NULL,
+    [Empleado_id] UNIQUEIDENTIFIER NOT NULL,
+    [Fecha]       DATETIMEOFFSET   NOT NULL,
+    CONSTRAINT [PK_Venta_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_Venta_Cliente_id] FOREIGN KEY ([Cliente_id]) REFERENCES [Cliente] ([id]),
+    CONSTRAINT [FK_Venta_Empleado_id] FOREIGN KEY ([Empleado_id]) REFERENCES [Empleado] ([id])
 
 );
+GO
 
-GO;
-
--- CREATE TABLE Line
-CREATE TABLE Line
+CREATE TABLE [Linea]
 (
-    [id]   UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    [Name] NVARCHAR(50)     NOT NULL
-        CONSTRAINT [PK_Line_id] PRIMARY KEY ([id])
+    [id]     UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Nombre] NVARCHAR(50)     NOT NULL,
+    CONSTRAINT [PK_Linea_id] PRIMARY KEY ([id])
 );
+GO
 
-GO;
+CREATE UNIQUE INDEX [IX_Linea_Nombre]
+    ON [Linea] ([Nombre]);
+GO
 
---CREATE INDEX FOR LINE.Name
-
-CREATE UNIQUE INDEX [IX_Line_Name]
-    ON [Line] ([Name]);
-
-GO;
-
-CREATE TABLE Category
+CREATE TABLE [Categoria]
 (
-    [id]    UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    [Name]  NVARCHAR(50)     NOT NULL,
-    Id_Line UNIQUEIDENTIFIER NOT NULL,
-    CONSTRAINT [PK_Category_id] PRIMARY KEY ([id]),
-    CONSTRAINT [FK_Line_id] FOREIGN KEY ([Id_Line]) REFERENCES [Line] ([id])
+    [id]     UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Nombre] NVARCHAR(50)     NOT NULL,
+    Id_Linea UNIQUEIDENTIFIER NOT NULL,
+    CONSTRAINT [PK_Categoria_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_Linea_id] FOREIGN KEY ([Id_Linea]) REFERENCES [Linea] ([id])
 );
+GO
 
-GO;
 
---Create index for Category.Name
-CREATE UNIQUE INDEX [IX_Category_Name]
-    ON [Category] ([Name]);
+CREATE UNIQUE INDEX [IX_Categoria_Nombre]
+    ON [Categoria] ([Nombre]);
+GO
 
-GO;
 
--- CREATE TABLE PRODUCT
-CREATE TABLE Product
+CREATE TABLE [Producto]
 (
-    [id]          UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    [Name]        NVARCHAR(50)     NOT NULL,
-    [Price]       DECIMAL(18, 2)   NOT NULL,
-    [Stock]       INT              NOT NULL,
-    [Category_id] UNIQUEIDENTIFIER NOT NULL,
-    CONSTRAINT [PK_Product_id] PRIMARY KEY ([id]),
-    CONSTRAINT [FK_Category_id] FOREIGN KEY ([Category_id]) REFERENCES [Category] ([id])
+    [id]           UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Nombre]       NVARCHAR(50)     NOT NULL,
+    [Precio]       DECIMAL(18, 2)   NOT NULL,
+    [Stock]        INT              NOT NULL,
+    [Categoria_id] UNIQUEIDENTIFIER NOT NULL,
+    CONSTRAINT [PK_Producto_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_Categoria_id] FOREIGN KEY ([Categoria_id]) REFERENCES [Categoria] ([id])
 );
+GO
 
-GO;
+CREATE UNIQUE INDEX [IX_Producto_Nombre]
+    ON [Producto] ([Nombre]);
+GO
 
--- CREATE INDEX FOR PRODUCT.Name
-CREATE UNIQUE INDEX [IX_Product_Name]
-    ON [Product] ([Name]);
-
-GO;
-
---CREATE TABLE FOR SALEDETAIL
-CREATE TABLE SalesDetail
+CREATE TABLE [DetalleVenta]
 (
     [id]          UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    [id_Product]  UNIQUEIDENTIFIER NOT NULL,
-    [Amount]      DECIMAL(10, 2)   NOT NULL,
-    [Description] NVARCHAR(50)     NOT NULL,
-    CONSTRAINT [FK_SalesDetail_Product_id] FOREIGN KEY ([id_Product]) REFERENCES [Product] ([id]),
-    CONSTRAINT [PK_SalesDetail_id] PRIMARY KEY ([id])
-
+    [Venta_id]    UNIQUEIDENTIFIER NOT NULL,
+    [Producto_id] UNIQUEIDENTIFIER NOT NULL,
+    [Cantidad]    INT              NOT NULL,
+    [Descripcion] NVARCHAR(50)     NOT NULL,
+    CONSTRAINT [PK_DetalleVenta_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_DetalleVenta_Venta_id] FOREIGN KEY ([Venta_id]) REFERENCES [Venta] ([id]),
+    CONSTRAINT [FK_DetalleVenta_Producto_id] FOREIGN KEY ([Producto_id]) REFERENCES [Producto] ([id])
 );
-
 GO;
 
---CREATE TABLE FOR PURCHASE
-CREATE TABLE Purchase
+
+CREATE TABLE [Compra]
+(
+    [id]           UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
+    [Fecha]        DATETIMEOFFSET   NOT NULL,
+    [Proveedor_id] UNIQUEIDENTIFIER NOT NULL,
+    [Empleado_id]  UNIQUEIDENTIFIER NOT NULL,
+    CONSTRAINT [PK_Compra_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_Compra_Proveedor_id] FOREIGN KEY ([Proveedor_id]) REFERENCES [Proveedor] ([id]),
+    CONSTRAINT [FK_Compra_Empleado_id] FOREIGN KEY ([Empleado_id]) REFERENCES [Empleado] ([id])
+
+);
+GO
+
+CREATE TABLE [DetalleCompra]
 (
     [id]          UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(),
-    [Date]        DATETIMEOFFSET   NOT NULL,
-    [Supplier_id] UNIQUEIDENTIFIER NOT NULL,
-    [Employee_id] UNIQUEIDENTIFIER NOT NULL,
-    CONSTRAINT [PK_Purchase_id] PRIMARY KEY ([id]),
-    CONSTRAINT [FK_Purchase_Supplier_id] FOREIGN KEY ([Supplier_id]) REFERENCES [Supplier] ([id]),
-    CONSTRAINT [FK_Purchase_Employee_id] FOREIGN KEY ([Employee_id]) REFERENCES [Employee] ([id])
-
+    [Compra_id]   UNIQUEIDENTIFIER NOT NULL,
+    [Producto_id] UNIQUEIDENTIFIER NOT NULL,
+    [Cantidad]    INT              NOT NULL,
+    [Descripcion] NVARCHAR(50)     NOT NULL,
+    CONSTRAINT [PK_DetalleCompra_id] PRIMARY KEY ([id]),
+    CONSTRAINT [FK_DetalleCompra_Compra_id] FOREIGN KEY ([Compra_id]) REFERENCES [Compra] ([id]),
+    CONSTRAINT [FK_DetalleCompra_Producto_id] FOREIGN KEY ([Producto_id]) REFERENCES [Producto] ([id])
 );
-
-GO;
-
---CREATE TABLE FOR PURCHASEDETAIL
-CREATE TABLE PurchaseDetail
-(
-    Id_Purchase UNIQUEIDENTIFIER NOT NULL,
-    Id_Product  UNIQUEIDENTIFIER NOT NULL,
-    Amount      DECIMAL(10, 2)   NOT NULL,
-    Description NVARCHAR(50)     NOT NULL,
-    CONSTRAINT [FK_PurchaseDetails_Purchase_id] FOREIGN KEY ([Id_Purchase]) REFERENCES [Purchase] ([id]),
-    CONSTRAINT [FK_PurchaseDetails_Product_id] FOREIGN KEY ([Id_Product]) REFERENCES [Product] ([id])
-);
-
-GO;
+GO
 
 
